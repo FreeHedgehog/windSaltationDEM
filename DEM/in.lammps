@@ -1,0 +1,31 @@
+# LAMMPS input for sand particles (template for lammpsFoam coupling)
+units          si
+atom_style     sphere
+boundary       p p p
+
+region         box block 0 1.0 0 0.20 0 0.10 units box
+create_box     1 box
+
+# Initial sand bed: 1 cm thickness
+lattice        sc 0.0002
+region         bed block 0 1.0 0 0.01 0 0.10 units box
+create_atoms   1 region bed
+
+# Particle properties
+set            type 1 diameter 0.00017
+set            type 1 density 2650
+
+# Contact model (granular)
+pair_style     granular
+pair_coeff     * * 200e9 0.25 0.5 0.5 0.0 0.0
+
+# Time integration and gravity
+fix            int all nve/sphere
+fix            grav all gravity 9.81 vector 0 -1 0
+
+timestep       1.0e-4
+
+# Note: CFD coupling fixes/commands should be inserted according to your lammpsFoam interface build.
+# The above is a placeholder template to be adapted.
+
+run            1

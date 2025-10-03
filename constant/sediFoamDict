@@ -1,0 +1,43 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \    /   O peration     | Version:  2.4.0                                  |
+|   \  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      sediFoamDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// CFD-DEM coupling settings (template – adjust per your lammpsFoam build)
+
+coupling
+{
+    useCFDTimeStep      yes;        // synchronize with CFD
+    couplingInterval    1;          // DEM steps per CFD step
+}
+
+particles
+{
+    density             2650;       // quartz sand [kg/m3]
+    diameter            1.7e-4;     // 170 microns [m]
+}
+
+dragModel
+{
+    type                ErgunWenYu; // default drag model
+}
+
+bed
+{
+    thickness           0.01;       // initial bed thickness [m]
+    patch               bed;        // mesh patch name
+}
+
+// ************************************************************************* //

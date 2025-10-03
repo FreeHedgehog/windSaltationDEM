@@ -1,0 +1,67 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \    /   O peration     | Version:  2.4.0                                  |
+|   \  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    inlet
+    {
+        type            codedFixedValue;
+        value           uniform (0 0 0);
+        code
+        #{
+            const fvPatch& p = this->patch();
+            vectorField& Ubf = *this;
+            const scalar uStar = 0.3;      // friction velocity [m/s]
+            const scalar z0    = 0.001;    // roughness length [m]
+            const scalar kappa = 0.41;     // von Karman constant
+            const scalar yBed  = 0.01;     // bed elevation [m]
+            forAll(p, i)
+            {
+                const point& c = p.Cf()[i];
+                scalar y = c.y();
+                scalar Ux = uStar/kappa*log(max(y - yBed, z0)/z0);
+                Ubf[i] = vector(Ux, 0, 0);
+            }
+        #};
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    bed
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+
+    top
+    {
+        type            slip;
+    }
+
+    sideWalls
+    {
+        type            slip;
+    }
+}
+
+// ************************************************************************* //

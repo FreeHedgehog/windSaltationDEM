@@ -1,0 +1,40 @@
+# OpenFOAM/CFD-DEM case .gitignore
+
+# --- Simulation outputs ---
+postProcessing/
+processor*/
+
+# Numeric time directories (e.g. 0.1/, 1/, 1000/)
+[0-9]*/
+# Keep the initial condition folder
+!0/
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+*.bak
+*.out
+*.err
+
+# --- Mesh generated files (regenerable) ---
+constant/polyMesh/
+# Keep mesh generator setup
+!system/blockMeshDict
+
+# OpenFOAM viewer/markers
+*.openfoam
+
+# Visualization exports
+*.vtp
+*.vtu
+*.vtk
+*.foam
+
+# DEM outputs (typical names)
+DEM/*dump*
+DEM/*.dat
+DEM/*.log
+
+# macOS metadata
+.DS_Store

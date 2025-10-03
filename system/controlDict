@@ -1,0 +1,85 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     lammpsFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         2;
+
+deltaT          1e-4;
+
+writeControl    timeStep;
+
+writeInterval   1000; // write every 0.1 s
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+functions
+{
+    probesVel
+    {
+        type            probes;
+        functionObjectLibs ("libsampling.so");
+        fields          (U k epsilon);
+        probeLocations  (
+            (0.20 0.10 0.005)
+            (0.50 0.10 0.005)
+            (0.80 0.10 0.005)
+        );
+    }
+
+    surfaces
+    {
+        type            surfaces;
+        libs            ("libsampling.so");
+        interpolationScheme cellPoint;
+        fields          (U k epsilon);
+        surfaceFormat   raw;
+        writeInterval   1000;
+        surfaces
+        (
+            verticalProfileX0p2
+            {
+                type        plane;
+                point       (0.20 0.10 0.00);
+                normal      (0 0 1);
+                planedirection (0 1 0);
+                bounds      ((0.20 0.20 0.00) (0.20 0.20 0.10));
+                triangulate false;
+            }
+        );
+    }
+}
+
+// ************************************************************************* //
