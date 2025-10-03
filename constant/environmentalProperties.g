@@ -19,7 +19,6 @@ FoamFile
 
 coupled         yes;        // enable CFD–DEM coupling
 alphaMax        0.60;       // maximum solids volume fraction used in coupling
-g               g;          // gravity field name (refers to constant/g)
 
 // Atmospheric/wind parameters
 uStar           0.30;       // friction velocity [m/s]
